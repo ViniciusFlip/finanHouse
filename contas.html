@@ -91,7 +91,37 @@ class="fixed inset-0 bg-black/30 hidden"></div>
     <h2 class="text-2xl font-bold mb-6">
         Contas Futuras
     </h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Total Futuro</p>
+        <h3 id="totalFuturo" class="text-2xl font-bold mt-2">
+            R$ 0,00
+        </h3>
+    </div>
+
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Este Mês</p>
+        <h3 id="esteMes" class="text-2xl font-bold mt-2">
+            R$ 0,00
+        </h3>
+    </div>
+
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Próximos 7 Dias</p>
+        <h3 id="proximos7Dias" class="text-2xl font-bold mt-2 text-green-600">
+            R$ 0,00
+        </h3>
+    </div>
+
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Vencidas</p>
+        <h3 id="vencidas" class="text-2xl font-bold mt-2 text-red-600">
+            R$ 0,00
+        </h3>
+    </div>
+
+</div>
     <!-- COMANDO -->
     <div class="bg-white rounded-xl border border-[#E5E7EB] p-4 mb-6">
 
@@ -163,6 +193,7 @@ collection,
 addDoc,
 getDocs,
 deleteDoc,
+updateDoc,
 doc
 }
 from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
@@ -186,6 +217,15 @@ const tabela = document.getElementById("tabela");
 const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("overlay");
 
+
+function limparFormulario(){
+
+    descricao.value = "";
+    valor.value = "";
+    vencimento.value = "";
+
+}
+
 openMenu.onclick = () => {
     sidebar.style.left = "0";
     overlay.classList.remove("hidden");
@@ -201,7 +241,34 @@ overlay.onclick = () => {
     overlay.classList.add("hidden");
 };
 
+let editandoId = null;
+window.editar = (
+    id,
+    descricao,
+    valor,
+    vencimento
+)=>{
 
+    document.getElementById("descricao").value =
+        descricao;
+
+    document.getElementById("valor").value =
+        valor;
+
+    document.getElementById("vencimento").value =
+        vencimento;
+
+    editandoId = id;
+
+    document.getElementById("salvar")
+        .innerText = "Atualizar";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+};
 // CREATE
 document
 .getElementById("salvar")
@@ -216,34 +283,84 @@ document
     const vencimento =
         document.getElementById("vencimento").value;
 
-    await addDoc(
-        collection(db, "contas_futuras"),
-        {
-            descricao,
-            valor:Number(valor),
-            vencimento
-        }
-    );
+    const dados = {
+        descricao,
+        valor: Number(valor),
+        vencimento
+    };
+
+    if(editandoId){
+
+        await updateDoc(
+            doc(db, "contas_futuras", editandoId),
+            dados
+        );
+
+        editandoId = null;
+
+        document.getElementById("salvar")
+        .innerText = "Salvar";
+
+    } else {
+
+        await addDoc(
+            collection(db, "contas_futuras"),
+            dados
+        );
+
+    }
+
+    limparFormulario();
 
     carregar();
 
 });
-
-
 // READ
-async function carregar() {
+ async function carregar() {
 
     tabela.innerHTML = "";
 
-    const snapshot =
-        await getDocs(
-            collection(db, "contas_futuras")
-        );
+    const snapshot = await getDocs(
+        collection(db, "contas_futuras")
+    );
+
+    // CARDS
+    let total = 0;
+    let totalMes = 0;
+    let proximos7 = 0;
+    let vencidas = 0;
+
+    const hoje = new Date();
 
     snapshot.forEach(item => {
 
         const conta = item.data();
 
+        // SOMATÓRIOS DOS CARDS
+        total += conta.valor;
+
+        const dataConta = new Date(conta.vencimento);
+
+        if (
+            dataConta.getMonth() === hoje.getMonth() &&
+            dataConta.getFullYear() === hoje.getFullYear()
+        ) {
+            totalMes += conta.valor;
+        }
+
+        const diff =
+            (dataConta - hoje) /
+            (1000 * 60 * 60 * 24);
+
+        if (diff >= 0 && diff <= 7) {
+            proximos7 += conta.valor;
+        }
+
+        if (dataConta < hoje) {
+            vencidas += conta.valor;
+        }
+
+        // TABELA
         tabela.innerHTML += `
         <tr class="border-t">
 
@@ -259,12 +376,27 @@ async function carregar() {
                 ${conta.vencimento}
             </td>
 
-            <td class="p-4 text-center">
+            <td class="p-4 text-center space-x-2">
+
+                <button
+                    onclick="editar(
+                        '${item.id}',
+                        '${conta.descricao}',
+                        '${conta.valor}',
+                        '${conta.vencimento}'
+                    )"
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+
+                    Editar
+
+                </button>
 
                 <button
                     onclick="remover('${item.id}')"
                     class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+
                     Excluir
+
                 </button>
 
             </td>
@@ -273,6 +405,26 @@ async function carregar() {
         `;
     });
 
+    // ATUALIZA OS CARDS
+    document.getElementById("totalFuturo").innerText =
+        `R$ ${total.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("esteMes").innerText =
+        `R$ ${totalMes.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("proximos7Dias").innerText =
+        `R$ ${proximos7.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("vencidas").innerText =
+        `R$ ${vencidas.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
 }
 
 carregar();
