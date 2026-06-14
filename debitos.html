@@ -181,6 +181,7 @@ class="block p-4 rounded-2xl bg-[linear-gradient(145deg,var(--card),var(--card2)
                <span class="sidebar-text">Entradas/Saidas</span>
                </a>
                
+               
             </nav>
          </aside>
 
@@ -315,7 +316,7 @@ class="block p-4 rounded-2xl bg-[linear-gradient(145deg,var(--card),var(--card2)
     </h1>
 
     <p class="text-sm text-zinc-500 mt-1">
-       Entradas / Saídas
+        Todas as Contas
     </p>
 
 </div>
@@ -323,123 +324,404 @@ class="block p-4 rounded-2xl bg-[linear-gradient(145deg,var(--card),var(--card2)
 
 
 
-          
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6 hidden">
+ 
+<!-- CONTEÚDO -->
+<main class="p-6">
 
-    <div class="bg-[#171717] rounded-[24px] p-6 border border-white/10">
-        <p class="text-gray-500 text-sm">Saldo Atual</p>
+    <h2 class="text-2xl font-bold mb-6">
+        Contas Futuras
+    </h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
-        <h2
-            id="saldo"
-            class="text-3xl font-bold text-blue-600 mt-2">
-
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Total Futuro</p>
+        <h3 id="totalFuturo" class="text-2xl font-bold mt-2">
             R$ 0,00
-
-        </h2>
+        </h3>
     </div>
 
-    <div class="bg-[#171717] rounded-[24px] p-6 border border-white/10">
-
-        <p class="text-gray-500 text-sm">
-
-            Entradas
-
-        </p>
-
-        <h2
-            id="entradas"
-            class="text-3xl font-bold text-green-600 mt-2">
-
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Este Mês</p>
+        <h3 id="esteMes" class="text-2xl font-bold mt-2">
             R$ 0,00
-
-        </h2>
-
+        </h3>
     </div>
 
-    <div class="bg-[#171717] rounded-[24px] p-6 border border-white/10">
-
-        <p class="text-gray-500 text-sm">
-
-            Saídas
-
-        </p>
-
-        <h2
-            id="saidas"
-            class="text-3xl font-bold text-red-600 mt-2">
-
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Próximos 7 Dias</p>
+        <h3 id="proximos7Dias" class="text-2xl font-bold mt-2 text-green-600">
             R$ 0,00
+        </h3>
+    </div>
 
-        </h2>
-
+    <div class="bg-white border border-[#E5E7EB] rounded-xl p-5">
+        <p class="text-sm text-gray-500">Vencidas</p>
+        <h3 id="vencidas" class="text-2xl font-bold mt-2 text-red-600">
+            R$ 0,00
+        </h3>
     </div>
 
 </div>
+    <!-- COMANDO -->
+    <div class="bg-white rounded-xl border border-[#E5E7EB] p-4 mb-6">
 
-<div class="max-w-4xl mx-auto ">
+        <div class="grid md:grid-cols-4 gap-3">
 
-<div class="flex justify-between items-center mb-6">
+            <input
+                id="descricao"
+                type="text"
+                placeholder="Descrição"
+                class="border rounded-lg p-3"
+            >
 
-<h1 class="text-3xl font-bold text-gray-800 dark:text-white">
-Lançamentos
-</h1>
+            <input
+                id="valor"
+                type="number"
+                placeholder="Valor"
+                class="border rounded-lg p-3"
+            >
 
-<button id="themeBtn"
-class="hidden px-4 py-2 rounded-lg bg-gray-900 text-white dark:bg-white dark:text-black">
-🌙 Tema
-</button>
+            <input
+                id="vencimento"
+                type="date"
+                class="border rounded-lg p-3"
+            >
 
-</div>
+            <button
+                id="salvar"
+                class="bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                Salvar
+            </button>
 
-<div class="bg-[#eeeeee] rounded-[24px] p-6 border border-white/10">
+        </div>
 
-<input
-id="command"
-type="text"
-placeholder="Ex: entrada 23,50 mercado taquaral"
-class="w-full rounded-lg border p-3 bg-[#ccc]  border-white/10">
+    </div>
 
-<button
-    id="btnAdicionar"
-    onclick="adicionar()"
-    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
-    Adicionar
-</button>
-<button
-    id="btnCancelar"
-    onclick="cancelarEdicao()"
-    class="hidden bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition">
-    Cancelar
-</button>
-</div>
+    <!-- TABELA -->
+    <div class="bg-white rounded-xl border border-[#E5E7EB] overflow-hidden">
 
-<div class="mt-8 overflow-auto">
+        <table class="w-full">
 
-<table class="w-full bg-white dark:bg-gray-800 rounded-xl overflow-hidden">
+            <thead class="bg-gray-50">
 
-<thead class="bg-[#ccc] border-b border-white/10">
+                <tr>
+                    <th class="text-left p-4">Descrição</th>
+                    <th class="text-left p-4">Valor</th>
+                    <th class="text-left p-4">Vencimento</th>
+                    <th class="text-center p-4">Ações</th>
+                </tr>
 
-<tr>
+            </thead>
 
-<th class="p-3 text-left ">Data</th>
-<th class="p-3 text-left">Tipo</th>
-<th class="p-3 text-left">Valor</th>
-<th class="p-3 text-left">Descrição</th>
-<th class="p-3">Ações</th>
+            <tbody id="tabela">
 
-</tr>
+            </tbody>
 
-</thead>
+        </table>
 
-<tbody id="tbody">
+    </div>
 
-</tbody>
+</main>
 
-</table>
+<script type="module">
 
-</div>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
 
-</div>
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+updateDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+const firebaseConfig = {
+   apiKey: "AIzaSyAChdrY05XhKerQvfjWl69BeEEqLKTfqC0",
+  authDomain: "finanhouse-bcf72.firebaseapp.com",
+  projectId: "finanhouse-bcf72",
+  storageBucket: "finanhouse-bcf72.firebasestorage.app",
+  messagingSenderId: "765310974104",
+  appId: "1:765310974104:web:949263b7197143c813f8ed"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const tabela = document.getElementById("tabela");
+
+
+// MENU
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+
+
+function limparFormulario(){
+
+    descricao.value = "";
+    valor.value = "";
+    vencimento.value = "";
+
+}
+
+// openMenu.onclick = () => {
+//     sidebar.style.left = "0";
+//     overlay.classList.remove("hidden");
+// };
+
+// closeMenu.onclick = () => {
+//     sidebar.style.left = "-320px";
+//     overlay.classList.add("hidden");
+// };
+
+// overlay.onclick = () => {
+//     sidebar.style.left = "-320px";
+//     overlay.classList.add("hidden");
+// };
+
+let editandoId = null;
+window.editar = (
+    id,
+    descricao,
+    valor,
+    vencimento
+)=>{
+
+    document.getElementById("descricao").value =
+        descricao;
+
+    document.getElementById("valor").value =
+        valor;
+
+    document.getElementById("vencimento").value =
+        vencimento;
+
+    editandoId = id;
+
+    document.getElementById("salvar")
+        .innerText = "Atualizar";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+};
+// CREATE
+document
+.getElementById("salvar")
+.addEventListener("click", async () => {
+
+    const descricao =
+        document.getElementById("descricao").value;
+
+    const valor =
+        document.getElementById("valor").value;
+
+    const vencimento =
+        document.getElementById("vencimento").value;
+
+    const dados = {
+        descricao,
+        valor: Number(valor),
+        vencimento
+    };
+
+    if(editandoId){
+
+        await updateDoc(
+            doc(db, "contas_futuras", editandoId),
+            dados
+        );
+
+        editandoId = null;
+
+        document.getElementById("salvar")
+        .innerText = "Salvar";
+
+    } else {
+
+        await addDoc(
+            collection(db, "contas_futuras"),
+            dados
+        );
+
+    }
+
+    limparFormulario();
+
+    carregar();
+
+});
+// READ
+ async function carregar() {
+
+    tabela.innerHTML = "";
+
+    const snapshot = await getDocs(
+        collection(db, "contas_futuras")
+    );
+
+    // CARDS
+    let total = 0;
+    let totalMes = 0;
+    let proximos7 = 0;
+    let vencidas = 0;
+
+    const hoje = new Date();
+
+    snapshot.forEach(item => {
+
+        const conta = item.data();
+
+        // SOMATÓRIOS DOS CARDS
+        total += conta.valor;
+
+        const dataConta = new Date(conta.vencimento);
+
+        if (
+            dataConta.getMonth() === hoje.getMonth() &&
+            dataConta.getFullYear() === hoje.getFullYear()
+        ) {
+            totalMes += conta.valor;
+        }
+
+        const diff =
+            (dataConta - hoje) /
+            (1000 * 60 * 60 * 24);
+
+        if (diff >= 0 && diff <= 7) {
+            proximos7 += conta.valor;
+        }
+
+        if (dataConta < hoje) {
+            vencidas += conta.valor;
+        }
+
+        // TABELA
+        tabela.innerHTML += `
+        <tr class="border-t">
+
+            <td class="p-4">
+                ${conta.descricao}
+            </td>
+
+            <td class="p-4">
+                R$ ${conta.valor.toFixed(2)}
+            </td>
+
+            <td class="p-4">
+                ${conta.vencimento}
+            </td>
+
+            <td class="p-4 text-center space-x-2">
+
+                <button
+                    onclick="editar(
+                        '${item.id}',
+                        '${conta.descricao}',
+                        '${conta.valor}',
+                        '${conta.vencimento}'
+                    )"
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+
+                    Editar
+
+                </button>
+
+                <button
+                    onclick="remover('${item.id}')"
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+
+                    Excluir
+
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+    });
+
+    // ATUALIZA OS CARDS
+    document.getElementById("totalFuturo").innerText =
+        `R$ ${total.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("esteMes").innerText =
+        `R$ ${totalMes.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("proximos7Dias").innerText =
+        `R$ ${proximos7.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+
+    document.getElementById("vencidas").innerText =
+        `R$ ${vencidas.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2
+        })}`;
+}
+
+carregar();
+
+
+// DELETE
+window.remover = async(id)=>{
+
+    await deleteDoc(
+        doc(
+            db,
+            "contas_futuras",
+            id
+        )
+    );
+
+    carregar();
+};
+
+
+const body = document.getElementById("body");
+const btnTheme = document.getElementById("toggleTheme");
+
+function aplicarTema(tema){
+
+    if(tema === "dark"){
+
+        body.className =
+            "bg-[#111827] text-[#F9FAFB]";
+
+        btnTheme.innerHTML = "☀️";
+
+        document.querySelectorAll(".card")
+            .forEach(card => {
+                card.className =
+                    "card bg-[#1F2937] border border-[#374151] rounded-xl p-5";
+            });
+
+    } else {
+
+        body.className =
+            "bg-[#F8FAFC] text-[#111827]";
+
+        btnTheme.innerHTML = "🌙";
+
+        document.querySelectorAll(".card")
+            .forEach(card => {
+                card.className =
+                    "card bg-white border border-[#E5E7EB] rounded-xl p-5";
+            });
+
+    }
+
+    localStorage.setItem("tema", tema);
+
+}
+</script>
  
 
        

@@ -15,7 +15,7 @@ body{
 </style>
 
 </head>
-<body class="text-gray-900">
+<body id="body" class="bg-[#F8FAFC] text-[#111827]">
 
 <!-- HEADER -->
 <header class="bg-white border-b border-[#E5E7EB] h-16 flex items-center justify-between px-4">
@@ -70,7 +70,11 @@ class="fixed top-0 left-[-320px] w-80 h-full bg-white shadow-xl transition-all d
 
     <div class="absolute bottom-0 w-full border-t p-4 text-sm text-gray-500">
 
-        <div>🌙 Tema</div>
+        <div>
+            <button id="toggleTheme" class="text-xl">
+    🌙
+</button>
+        </div>
         <div>☁ Online</div>
 
         <div class="mt-4">
@@ -444,6 +448,43 @@ window.remover = async(id)=>{
     carregar();
 };
 
+
+const body = document.getElementById("body");
+const btnTheme = document.getElementById("toggleTheme");
+
+function aplicarTema(tema){
+
+    if(tema === "dark"){
+
+        body.className =
+            "bg-[#111827] text-[#F9FAFB]";
+
+        btnTheme.innerHTML = "☀️";
+
+        document.querySelectorAll(".card")
+            .forEach(card => {
+                card.className =
+                    "card bg-[#1F2937] border border-[#374151] rounded-xl p-5";
+            });
+
+    } else {
+
+        body.className =
+            "bg-[#F8FAFC] text-[#111827]";
+
+        btnTheme.innerHTML = "🌙";
+
+        document.querySelectorAll(".card")
+            .forEach(card => {
+                card.className =
+                    "card bg-white border border-[#E5E7EB] rounded-xl p-5";
+            });
+
+    }
+
+    localStorage.setItem("tema", tema);
+
+}
 </script>
 
 </body>
