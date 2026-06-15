@@ -6,9 +6,49 @@ import {
     atualizarLancamento,
     
 } from "./services/lancamentos/lancamentos.service.js";
+
+import { loginGoogle, onAuthChange } from "./services/auth/auth.service.js";
+
+
+
 let data=[];
 
 let editandoId = null;
+
+
+onAuthChange((user) => {
+
+    if (user) {
+
+        console.log("Usuário logado:");
+
+        console.log(user);
+
+    } else {
+
+        console.log("Nenhum usuário logado");
+
+    }
+
+});
+
+
+async function testarLogin() {
+
+    try {
+
+        const user = await loginGoogle();
+
+        console.log(user);
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
 async function atualizarTela(){
 
     data = await listarLancamentos();
@@ -258,3 +298,6 @@ document.documentElement.classList.toggle("dark");
 window.editar = editar;
 window.remover = remover;
 window.cancelarEdicao = cancelarEdicao;
+
+
+window.testarLogin = testarLogin;
