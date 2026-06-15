@@ -13,7 +13,12 @@ import {
  
  import { getUser } from "../auth/auth.service.js";
 
-export async function salvarLancamento(tipo, valor, descricao) {
+export async function salvarLancamento(
+    tipo,
+    valor,
+    categoria,
+    descricao
+) {
 
     try {
 
@@ -29,12 +34,13 @@ export async function salvarLancamento(tipo, valor, descricao) {
                 uid: user.uid,
                 userName: user.displayName,
                 userEmail: user.email,
-                userPhoto: user.photoURL,
-
+                userPhoto: user.photoURL || null,
 
                 tipo,
+                categoria,
                 valor,
                 descricao,
+
                 createdAt: serverTimestamp()
             }
         );

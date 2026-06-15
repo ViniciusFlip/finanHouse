@@ -8,9 +8,9 @@ import {
 } from "./services/lancamentos/lancamentos.service.js";
 
 import { loginGoogle, onAuthChange } from "./services/auth/auth.service.js";
+import { getCategorias,categoriaExiste } from "./services/categorias/categorias.service.js";
 
-
-
+console.log("cats",getCategorias());
 let data=[];
 
 let editandoId = null;
@@ -179,6 +179,10 @@ ${item.tipo}
 </td>
 
 <td class="p-3 dark:text-white">
+${item.categoria || "—"}
+</td>
+
+<td class="p-3 dark:text-white">
 R$ ${item.valor.toFixed(2)}
 </td>
 
@@ -222,13 +226,23 @@ Excluir
 
     if (!texto) return;
 
-    const partes = texto.split(" ");
+    
 
-    const tipo = partes[0].toLowerCase();
+const partes = texto.split(" ");
 
-    const valor = parseFloat(partes[1].replace(",", "."));
+const tipo = partes[0].toLowerCase();
+const valor = parseFloat(partes[1].replace(",", "."));
+const categoria = partes[2];
+const descricao = partes.slice(3).join(" ");
 
-    const descricao = partes.slice(2).join(" ");
+console.log({
+    tipo,
+    valor,
+    categoria,
+    descricao
+});
+
+
 
     if (
         (tipo !== "entrada" && tipo !== "saida") ||
@@ -238,12 +252,22 @@ Excluir
         return;
     }
 
+    if (!categoriaExiste(tipo, categoria)) {
+
+    alert(
+        `Categoria "${categoria}" não encontrada para ${tipo}.`
+    );
+
+    return;
+
+}
     if (editandoId) {
 
         await atualizarLancamento(editandoId, {
-            tipo,
-            valor,
-            descricao
+              tipo,
+                valor,
+                categoria,
+                descricao
         });
 
         editandoId = null;
@@ -252,9 +276,10 @@ Excluir
     } else {
 
         await salvarLancamento(
-            tipo,
-            valor,
-            descricao
+             tipo,
+                valor,
+                categoria,
+                descricao
         );
 
     }
@@ -326,7 +351,7 @@ document.documentElement.classList.toggle("dark");
     console.log(lancamentos);
 
 })();
-window.adicionar
+window.adicionar = adicionar;
 window.editar = editar;
 window.remover = remover;
 window.cancelarEdicao = cancelarEdicao;
