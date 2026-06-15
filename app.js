@@ -23,6 +23,7 @@ onAuthChange((user) => {
         console.log("Usuário logado:");
 
         console.log(user);
+        atualizarUsuario(user);
 
     } else {
 
@@ -32,6 +33,34 @@ onAuthChange((user) => {
 
 });
 
+
+function atualizarUsuario(user) {
+
+    const nome = document.getElementById("user-name");
+    const email = document.getElementById("user-email");
+    const photo = document.getElementById("user-photo");
+
+    if (!nome || !email || !photo) return;
+
+    if (user) {
+
+        photo.src = user.photoURL || "assets/img/avatar.png";
+
+        nome.textContent = user.displayName || "Usuário";
+
+        email.textContent = user.email || "";
+
+    } else {
+
+        photo.src = "assets/img/avatar.png";
+
+        nome.textContent = "Não autenticado";
+
+        email.textContent = "";
+
+    }
+
+}
 
 async function testarLogin() {
 
@@ -154,9 +183,12 @@ R$ ${item.valor.toFixed(2)}
 </td>
 
 <td class="p-3 dark:text-white">
-${item.descricao}
+    ${item.userName || "—"}
 </td>
 
+<td class="p-3 dark:text-white">
+${item.descricao}
+</td>
 <td class="p-3 flex gap-2 justify-center">
 
 <button
@@ -294,7 +326,7 @@ document.documentElement.classList.toggle("dark");
     console.log(lancamentos);
 
 })();
-
+window.adicionar
 window.editar = editar;
 window.remover = remover;
 window.cancelarEdicao = cancelarEdicao;

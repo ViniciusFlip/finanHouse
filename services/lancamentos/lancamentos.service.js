@@ -10,14 +10,28 @@ import {
     deleteDoc,
     serverTimestamp
 } from "../../firebase.config.js";
+ 
+ import { getUser } from "../auth/auth.service.js";
 
 export async function salvarLancamento(tipo, valor, descricao) {
 
     try {
 
+        const user = getUser();
+
+        if (!user) {
+            throw new Error("Nenhum usuário autenticado.");
+        }
+
         const docRef = await addDoc(
             collection(db, "lancamentos"),
             {
+                uid: user.uid,
+                userName: user.displayName,
+                userEmail: user.email,
+                userPhoto: user.photoURL,
+
+
                 tipo,
                 valor,
                 descricao,
@@ -27,18 +41,13 @@ export async function salvarLancamento(tipo, valor, descricao) {
 
         console.log("Documento salvo:", docRef.id);
 
-        return docRef.id;
-
     } catch (error) {
 
-        console.error(error);
-
-        throw error;
+        console.error("Erro ao salvar:", error);
 
     }
 
 }
-
 export async function listarLancamentos() {
 
     try {

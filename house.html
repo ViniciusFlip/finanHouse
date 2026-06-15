@@ -291,7 +291,7 @@ class="block p-4 rounded-2xl bg-[linear-gradient(145deg,var(--card),var(--card2)
         <div>
           <h4 class="font-medium">Thais</h4>
           <p class="text-xs text-zinc-500">
-            há 2 horas
+        
           </p>
         </div>
 
@@ -308,18 +308,26 @@ class="block p-4 rounded-2xl bg-[linear-gradient(145deg,var(--card),var(--card2)
             </header>
 
            
-            <div class="mb-6 mt-6">
+        <div>
+<div id="user-avatar"
+    class="w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center font-semibold overflow-hidden">
 
-    <h1 class="text-2xl font-bold">
-         Olá, Thais
-    </h1>
+    <img
+        id="user-photo"
+        class="w-full h-full object-cover hidden"
+    >
 
-    <p class="text-sm text-zinc-500 mt-1">
-       Entradas / Saídas
-    </p>
+    <span id="user-initials"></span>
 
 </div>
             
+            <h4 id="user-name" class="font-medium">
+                Não autenticado
+            </h4>
+
+            <p id="user-email" class="text-xs text-zinc-500">
+            </p>
+        </div> 
 
 
 
@@ -422,6 +430,7 @@ class="w-full rounded-lg border p-3 bg-[#ccc]  border-white/10">
 <th class="p-3 text-left ">Data</th>
 <th class="p-3 text-left">Tipo</th>
 <th class="p-3 text-left">Valor</th>
+<th class="p-3 text-left">Usuário</th>
 <th class="p-3 text-left">Descrição</th>
 <th class="p-3">Ações</th>
 

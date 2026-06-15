@@ -69,16 +69,26 @@ export async function logout() {
     }
 
 }
+const DEV_MODE = location.hostname === "127.0.0.1" ||
+                 location.hostname === "localhost";
 
+const DEV_USER = {
+    uid: "dev-user",
+    displayName: "Desenvolvedor",
+    email: "dev@localhost"
+};
 /**
  * Usuário atual
  */
 export function getUser() {
 
+    if (DEV_MODE) {
+        return DEV_USER;
+    }
+
     return auth.currentUser;
 
 }
-
 /**
  * Escuta alterações de autenticação
  */
