@@ -10,7 +10,8 @@ import {
 import { loginGoogle, onAuthChange } from "./services/auth/auth.service.js";
 import { getCategorias,categoriaExiste } from "./services/categorias/categorias.service.js";
 
-console.log("cats",getCategorias());
+// console.log("cats",getCategorias());
+console.log("APP CARREGOU");
 let data=[];
 
 let editandoId = null;
@@ -79,6 +80,7 @@ async function testarLogin() {
 }
 
 async function atualizarTela(){
+   console.trace("ATUALIZAR TELA CHAMOU");
 
     data = await listarLancamentos();
 
@@ -147,7 +149,7 @@ function cancelarEdicao() {
 function render() {
 
     const tbody = document.getElementById("tbody");
-
+console.count("RENDER EXECUTOU");
     tbody.innerHTML = "";
 
     data.forEach((item, index) => {
@@ -162,7 +164,7 @@ function render() {
       })
     : "--";
 
-        console.log(item);
+        // console.log(item);
 
         tbody.innerHTML += `
 
@@ -215,7 +217,7 @@ Excluir
 
     });
 
-    atualizarDashboard();
+    // atualizarDashboard();
 
 }
  async function adicionar() {
@@ -344,14 +346,8 @@ document.documentElement.classList.toggle("dark");
     await atualizarTela();
 })();
 
-(async () => {
-
-    const lancamentos = await listarLancamentos();
-
-    console.log(lancamentos);
-
-})();
-window.adicionar = adicionar;
+ 
+window.adicionar  
 window.editar = editar;
 window.remover = remover;
 window.cancelarEdicao = cancelarEdicao;
