@@ -9,6 +9,8 @@ export const categorias = {
     saida: [
         "Alimentação",
         "Manga",
+        "Marion",
+        "Recarga",
         "Casa",
         "Transporte",
         "Saúde",
