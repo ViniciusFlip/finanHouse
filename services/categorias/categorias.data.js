@@ -1,21 +1,19 @@
 export const categorias = {
 
     entrada: [
-        "Salário",
-        "Freelance",
-        "Investimento",
-        "Venda",
+      
+        "Freela", 
         "Outros"
     ],
 
     saida: [
         "Alimentação",
+        "Manga",
         "Casa",
         "Transporte",
         "Saúde",
         "Lazer",
         "Educação",
-        "Compras",
         "Outros"
     ]
 

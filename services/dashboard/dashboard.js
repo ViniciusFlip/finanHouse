@@ -39,6 +39,20 @@ function calcularSeteDias(lista){
         saidas
     };
 }
+
+function atualizarSeteDias(dados){
+
+    const elEntradas = document.querySelector("#seteEntradas");
+    const elSaidas = document.querySelector("#seteSaidas");
+
+    if (elEntradas) {
+        elEntradas.innerHTML = formatarMoeda(dados.entradas);
+    }
+
+    if (elSaidas) {
+        elSaidas.innerHTML = formatarMoeda(dados.saidas);
+    }
+}
 function mesmoDia(data){
 
     const hoje = new Date();
@@ -149,9 +163,10 @@ export async function carregarDashboard(){
 
 
     const hoje = calcularHoje(lancamentos);
-
+    const seteDias = calcularSeteDias(lancamentos);
 
     atualizarHoje(hoje);
+    atualizarSeteDias(seteDias);
 
 
 }
