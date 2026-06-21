@@ -166,50 +166,105 @@ console.count("RENDER EXECUTOU");
 
         // console.log(item);
 
-        tbody.innerHTML += `
+tbody.innerHTML += `
 
-<tr class="border-b border-gray-200 dark:border-gray-700">
+<tr class="
+    border-b border-gray-200 
+    ${item.tipo==="entrada" 
+        ? "bg-green-50 hover:bg-green-100" 
+        : "bg-red-50 hover:bg-red-100"}
+    transition
+">
 
-<td class="p-3 dark:text-white">
+<td class="p-5 h-24 text-gray-700 dark:text-white">
     ${dataFormatada}
 </td>
 
-<td class="p-3">
-<span class="${item.tipo==="entrada" ? "text-green-600" : "text-red-500"} font-semibold">
+
+<td class="p-5">
+
+<span class="
+px-4 py-2 rounded-full text-sm font-semibold
+${item.tipo==="entrada" 
+    ? "bg-green-200 text-green-700" 
+    : "bg-red-200 text-red-700"}
+">
+
 ${item.tipo}
+
 </span>
+
 </td>
 
-<td class="p-3 dark:text-white">
+
+<td class="p-5 text-gray-700 dark:text-white">
 ${item.categoria || "—"}
 </td>
 
-<td class="p-3 dark:text-white">
+
+<td class="p-5">
+
+<span class="
+text-lg font-bold
+${item.tipo==="entrada" 
+    ? "text-green-700" 
+    : "text-red-700"}
+">
+
 R$ ${item.valor.toFixed(2)}
+
+</span>
+
 </td>
 
-<td class="p-3 dark:text-white">
-    ${item.userName || "—"}
+
+<td class="p-5 text-gray-700 dark:text-white">
+${item.userName || "—"}
 </td>
 
-<td class="p-3 dark:text-white">
-${item.descricao}
+
+<td class="p-5 text-gray-700 dark:text-white">
+${item.descricao || "—"}
 </td>
-<td class="p-3 flex gap-2 justify-center">
+
+
+<td class="p-5">
+
+<div class="flex gap-3 justify-center">
+
 
 <button
 onclick="editar('${item.id}')"
-class="bg-yellow-500 text-white px-3 py-1 rounded">
+class="
+h-10 px-5 rounded-xl
+bg-yellow-400 hover:bg-yellow-500
+text-white font-semibold
+transition active:scale-95
+">
+
 Editar
+
 </button>
+
 
 <button
 onclick="remover('${item.id}')"
-class="bg-red-600 text-white px-3 py-1 rounded">
+class="
+h-10 px-5 rounded-xl
+bg-red-500 hover:bg-red-600
+text-white font-semibold
+transition active:scale-95
+">
+
 Excluir
+
 </button>
 
+
+</div>
+
 </td>
+
 
 </tr>
 
