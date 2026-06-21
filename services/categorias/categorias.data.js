@@ -4,7 +4,8 @@ export const categorias = {
       
         "Freela", 
         "Outros",
-        "Thais"
+        "Thais",
+        "Vinicius",
     ],
 
     saida: [
