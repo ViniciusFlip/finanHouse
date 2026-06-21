@@ -532,78 +532,66 @@
                      ▲ +12%
                      </span>
                   </div>
-                  <div
-                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
-                     <p  >
-                        Total Thais
-                     </p>
-                     <div class="">
-                        <h3
-                           class="text-green-600 text-4xl font-bold mt-4">
-                           R$ 0,00
-                        </h3>
-                        <span class="text-gray-500">
-                        Entradas
-                        </span>
-                     </div>
-                     <div class="">
-                        <h3
-                           class="text-red-600 text-4xl font-bold mt-4">
-                           R$ 0,00
-                        </h3>
-                        <span class="text-gray-500">
-                        Saídas
-                        </span>
-                     </div>
-                  </div>
-                  <div
-                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
-                     <p  >
-                        Total Marion
-                     </p>
-                     <div class="">
-                        <h3
-                           class="text-green-600 text-4xl font-bold mt-4">
-                           R$0,00
-                        </h3>
-                        <span class="text-gray-500">
-                        Entradas
-                        </span>
-                     </div>
-                     <div class="">
-                        <h3
-                           class="text-red-600 text-4xl font-bold mt-4">
-                           R$ 0,00
-                        </h3>
-                        <span class="text-gray-500">
-                        Saídas
-                        </span>
-                     </div>
-                  </div>
-                  <div
-                     class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
-                     <p  >
-                        Total Vinicius
-                     </p>
-                     <div class="">
-                        <h3
-                           class="text-green-600 text-4xl font-bold mt-4">
-                           R$0,00
-                        </h3>
-                        <span class="text-gray-500">
-                        Entradas
-                        </span>
-                     </div>
-                     <div class="">
-                        <h3
-                           class="text-red-600 text-4xl font-bold mt-4">
-                           R$ 0,00
-                        </h3>
-                        <span class="text-gray-500">
-                        Saídas
-                        </span>
-                     </div>
-                  </div>
+                
+                  
+                  
+        <div class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+
+    <p>Total Vinicius</p>
+
+    <div>
+        <h3 id="entradas-vinicius" class="text-green-600 text-4xl font-bold mt-4">
+            R$ 0,00
+        </h3>
+        <span class="text-gray-500">Entradas</span>
+    </div>
+
+    <div class="mt-4">
+        <h3 id="saidas-vinicius" class="text-red-600 text-4xl font-bold mt-4">
+            R$ 0,00
+        </h3>
+        <span class="text-gray-500">Saídas</span>
+    </div>
+
+</div>
+ <div class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+
+    <p>Total Thais</p>
+
+    <div>
+        <h3 id="entradas-thais" class="text-green-600 text-4xl font-bold mt-4">
+            R$ 0,00
+        </h3>
+        <span class="text-gray-500">Entradas</span>
+    </div>
+
+    <div class="mt-4">
+        <h3 id="saidas-thais" class="text-red-600 text-4xl font-bold mt-4">
+            R$ 0,00
+        </h3>
+        <span class="text-gray-500">Saídas</span>
+    </div>
+
+</div>
+ <div class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
+
+    <p>Total Marion</p>
+
+    <div>
+        <h3 id="entradas-marion" class="text-green-600 text-4xl font-bold mt-4">
+            R$ 0,00
+        </h3>
+        <span class="text-gray-500">Entradas</span>
+    </div>
+
+    <div class="mt-4">
+        <h3 id="saidas-marion" class="text-red-600 text-4xl font-bold mt-4">
+            R$ 0,00
+        </h3>
+        <span class="text-gray-500">Saídas</span>
+    </div>
+
+</div>
                   <div
                      class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
                      <p  >
@@ -957,12 +945,62 @@ async function carregarResumo30Dias() {
         });
 
 }
+
+
+ 
+
+async function carregarResumoPorCategoria(categoria) {
+
+    const lancamentos = await listarLancamentos();
+
+    let entradas = 0;
+    let saidas = 0;
+
+    lancamentos.forEach(item => {
+
+        // filtro seguro
+        if (!item.categoria) return;
+
+        if (item.categoria.toLowerCase().trim() !== categoria.toLowerCase()) return;
+
+        if (item.tipo === "entrada") {
+            entradas += Number(item.valor);
+        }
+
+        if (item.tipo === "saida") {
+            saidas += Number(item.valor);
+        }
+
+    });
+
+    const entradasEl = document.getElementById(`entradas-${categoria}`);
+    const saidasEl = document.getElementById(`saidas-${categoria}`);
+
+    if (entradasEl) {
+        entradasEl.textContent = entradas.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+    }
+
+    if (saidasEl) {
+        saidasEl.textContent = saidas.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+    }
+}
+
+carregarResumoPorCategoria("marion");
+carregarResumoPorCategoria("thais");
+carregarResumoPorCategoria("vinicius");
 carregarResumo();
 
 carregarResumoHoje();
 
 carregarResumo7Dias()
 carregarResumo30Dias()
+ 
 </script>
    </body>
 </html>
