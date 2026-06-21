@@ -552,7 +552,13 @@
         </h3>
         <span class="text-gray-500">Saídas</span>
     </div>
-
+<div class="mt-4">
+   
+        <h3 id="saidas-manga" class="text-red-600 text-4xl font-bold mt-4">
+            R$ 0,00
+        </h3>
+        <span class="text-gray-500">Saídas/Manga</span>
+    </div>
 </div>
  <div class="bg-[#f7f7f7] text-black rounded-3xl p-6 shadow-card">
 
@@ -991,6 +997,7 @@ async function carregarResumoPorCategoria(categoria) {
     }
 }
 
+carregarResumoPorCategoria("manga");
 carregarResumoPorCategoria("marion");
 carregarResumoPorCategoria("thais");
 carregarResumoPorCategoria("vinicius");
