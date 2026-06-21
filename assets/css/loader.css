@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
 
-    background: var(--bg-primary);
+    background: white;
 
     transition: opacity .3s ease;
 }
@@ -34,7 +34,7 @@
 
     border-radius: 999px;
 
-    background: var(--loader-track);
+    background: #0060db;
 }
 
 .loader-progress {
@@ -43,7 +43,7 @@
 
     border-radius: inherit;
 
-    background: var(--loader-progress);
+    background: #0060db;
 
     transition: width .25s ease;
 }

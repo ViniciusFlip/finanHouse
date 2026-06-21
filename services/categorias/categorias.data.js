@@ -3,18 +3,28 @@ export const categorias = {
     entrada: [
       
         "Freela", 
-        "Outros"
+        "Outros",
+        "Thais"
     ],
 
     saida: [
-        "Alimentação",
-        "Manga",
-        "Marion",
-        "Recarga",
         "Casa",
+        "Alimentação",
+        "Lazer",
+        
+        "Marion",
+        "Thais",
+        "Vinicius",
+
+        "Poupança",
+
+        "Manga",
+        "Recarga",
+        "Remedio",
+      
         "Transporte",
         "Saúde",
-        "Lazer",
+        
         "Educação",
         "Outros"
     ]
