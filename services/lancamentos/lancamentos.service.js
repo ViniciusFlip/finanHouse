@@ -27,29 +27,30 @@ export async function salvarLancamento(
 
         if (!user) throw new Error("Nenhum usuário autenticado.");
 
-        let dataLancamento;
+         
 
-        if (data) {
+       let dataLancamento;
 
-            const [dia, mes, ano] = data.split("/");
-            dataLancamento = new Date()
+if (data) {
 
-        } else {
+    const [dia, mes, ano] = data.split("/");
 
-            const agora = new Date();
+    const agora = new Date();
 
-            dataLancamento = data
-                ? new Date(
-                    ano,
-                    mes - 1,
-                    dia,
-                    agora.getHours(),
-                    agora.getMinutes(),
-                    agora.getSeconds()
-                )
-                : agora;
+    dataLancamento = new Date(
+        ano,
+        mes - 1,
+        dia,
+        agora.getHours(),
+        agora.getMinutes(),
+        agora.getSeconds()
+    );
 
-        }
+} else {
+
+    dataLancamento = new Date();
+
+}
 
         const docRef = await addDoc(
             collection(db, "lancamentos"),
@@ -133,16 +134,49 @@ export async function atualizarLancamento(id, dados) {
 
     try {
 
-     if (dados.data) {
+        if (dados.data) {
 
-    const [dia, mes, ano] = dados.data.split("/");
+            let date;
 
-    const agora = new Date();
+            // 🔥 caso venha string (input)
+            if (typeof dados.data === "string") {
 
-    dados.data = new Date(
-        `${ano}-${mes}-${dia}T${agora.getHours()}:${agora.getMinutes()}:${agora.getSeconds()}`
-    );
-}
+                const [dia, mes, ano] = dados.data.split("/");
+
+                const agora = new Date();
+
+                date = new Date(
+                    ano,
+                    mes - 1,
+                    dia,
+                    agora.getHours(),
+                    agora.getMinutes(),
+                    agora.getSeconds()
+                );
+
+            } 
+            // 🔥 caso venha Timestamp ou Date
+            else {
+
+                const d = dados.data.toDate
+                    ? dados.data.toDate()
+                    : new Date(dados.data);
+
+                const agora = new Date();
+
+                date = new Date(
+                    d.getFullYear(),
+                    d.getMonth(),
+                    d.getDate(),
+                    agora.getHours(),
+                    agora.getMinutes(),
+                    agora.getSeconds()
+                );
+            }
+
+            dados.data = date;
+        }
+
         await updateDoc(
             doc(db, "lancamentos", id),
             dados
@@ -153,9 +187,6 @@ export async function atualizarLancamento(id, dados) {
     } catch (error) {
 
         console.error("Erro ao atualizar:", error);
-
         throw error;
-
     }
-
 }

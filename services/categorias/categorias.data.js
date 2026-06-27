@@ -6,6 +6,8 @@ export const categorias = {
         "Outros",
         "Thais",
         "Vinicius",
+        "Poupança",
+        "teste"
     ],
 
     saida: [

@@ -155,8 +155,8 @@ function render() {
     data.forEach((item, index) => {
 
     
-    console.log("DATA RAW:", item.data?.toDate?.());
-    console.log("CREATED RAW:", item.createdAt?.toDate?.());
+    // console.log("DATA RAW:", item.data?.toDate?.());
+    // console.log("CREATED RAW:", item.createdAt?.toDate?.());
 
    const dataBase = item.data || item.createdAt;
 
