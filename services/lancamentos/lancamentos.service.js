@@ -17,15 +17,38 @@ export async function salvarLancamento(
     tipo,
     valor,
     categoria,
-    descricao
+    descricao,
+    data = null
 ) {
 
     try {
 
         const user = getUser();
 
-        if (!user) {
-            throw new Error("Nenhum usuário autenticado.");
+        if (!user) throw new Error("Nenhum usuário autenticado.");
+
+        let dataLancamento;
+
+        if (data) {
+
+            const [dia, mes, ano] = data.split("/");
+            dataLancamento = new Date()
+
+        } else {
+
+            const agora = new Date();
+
+            dataLancamento = data
+                ? new Date(
+                    ano,
+                    mes - 1,
+                    dia,
+                    agora.getHours(),
+                    agora.getMinutes(),
+                    agora.getSeconds()
+                )
+                : agora;
+
         }
 
         const docRef = await addDoc(
@@ -41,15 +64,22 @@ export async function salvarLancamento(
                 valor,
                 descricao,
 
+                data: dataLancamento,
                 createdAt: serverTimestamp()
             }
         );
-
+console.log("Salvou:", {
+    tipo,
+    valor,
+    categoria,
+    descricao,
+    data
+});
         console.log("Documento salvo:", docRef.id);
 
     } catch (error) {
 
-        console.error("Erro ao salvar:", error);
+        console.error(error);
 
     }
 
@@ -99,11 +129,20 @@ export async function excluirLancamento(id) {
     }
 
 }
-
 export async function atualizarLancamento(id, dados) {
 
     try {
 
+     if (dados.data) {
+
+    const [dia, mes, ano] = dados.data.split("/");
+
+    const agora = new Date();
+
+    dados.data = new Date(
+        `${ano}-${mes}-${dia}T${agora.getHours()}:${agora.getMinutes()}:${agora.getSeconds()}`
+    );
+}
         await updateDoc(
             doc(db, "lancamentos", id),
             dados

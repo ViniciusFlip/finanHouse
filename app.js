@@ -149,13 +149,19 @@ function cancelarEdicao() {
 function render() {
 
     const tbody = document.getElementById("tbody");
-console.count("RENDER EXECUTOU");
+
     tbody.innerHTML = "";
 
     data.forEach((item, index) => {
 
-       const dataFormatada = item.createdAt
-    ? item.createdAt.toDate().toLocaleString("pt-BR", {
+    
+    console.log("DATA RAW:", item.data?.toDate?.());
+    console.log("CREATED RAW:", item.createdAt?.toDate?.());
+
+   const dataBase = item.data || item.createdAt;
+
+    const dataFormatada = dataBase
+    ? dataBase.toDate().toLocaleString("pt-BR", {
           day: "2-digit",
           month: "2-digit",
           year: "numeric",
@@ -290,15 +296,30 @@ const partes = texto.split(" ");
 const tipo = partes[0].toLowerCase();
 const valor = parseFloat(partes[1].replace(",", "."));
 const categoria = partes[2];
+
+ const dataRegex = /^\d{2}\/\d{2}\/\d{4}(\s\d{2}:\d{2})?$/;
+
+let data = null;
+
+for (let i = partes.length - 1; i >= 0; i--) {
+
+    const possivelData = partes.slice(i).join(" ");
+
+    if (dataRegex.test(possivelData)) {
+        data = possivelData;
+        partes.splice(i);
+        break;
+    }
+}
 const descricao = partes.slice(3).join(" ");
 
 console.log({
     tipo,
     valor,
     categoria,
-    descricao
+    descricao,
+    data
 });
-
 
 
     if (
@@ -320,23 +341,24 @@ console.log({
 }
     if (editandoId) {
 
-        await atualizarLancamento(editandoId, {
-              tipo,
-                valor,
-                categoria,
-                descricao
-        });
-
+     await atualizarLancamento(editandoId, {
+        tipo,
+        valor,
+        categoria,
+        descricao,
+        data
+    });
         editandoId = null;
         document.getElementById("btnAdicionar").textContent = "Adicionar";
         document.getElementById("btnCancelar").classList.add("hidden");
     } else {
 
         await salvarLancamento(
-             tipo,
-                valor,
-                categoria,
-                descricao
+            tipo,
+            valor,
+            categoria,
+            descricao,
+            data
         );
 
     }
@@ -368,17 +390,30 @@ function editar(id) {
 
     const input = document.getElementById("command");
 
-    input.value = `${lancamento.tipo} ${lancamento.valor} ${lancamento.descricao}`;
+    const dataObj = lancamento.data || lancamento.createdAt;
+
+ let dataFormatada = "";
+
+if (dataObj) {
+
+    const d = dataObj.toDate();
+
+    const dia = String(d.getDate()).padStart(2, "0");
+    const mes = String(d.getMonth() + 1).padStart(2, "0");
+    const ano = d.getFullYear();
+    dataFormatada = `${dia}/${mes}/${ano}`;
+}
+    input.value =
+        `${lancamento.tipo} ${lancamento.valor} ${lancamento.categoria} ${lancamento.descricao}` +
+        (dataFormatada ? ` ${dataFormatada}` : "");
 
     editandoId = id;
-    const botao = document.getElementById("btnAdicionar");
 
-    botao.textContent = "Salvar alterações";
+    document.getElementById("btnAdicionar").textContent = "Salvar alterações";
     document.getElementById("btnCancelar").classList.remove("hidden");
+
     input.focus();
-
 }
-
 document.getElementById("btnAdicionar")
 .addEventListener("click",adicionar);
 
