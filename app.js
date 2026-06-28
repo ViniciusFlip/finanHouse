@@ -1,178 +1,183 @@
- 
-import {
-    salvarLancamento,
-    listarLancamentos,
-    excluirLancamento,
-    atualizarLancamento,
-    
-} from "./services/lancamentos/lancamentos.service.js";
+ import {
+     salvarLancamento,
+     listarLancamentos,
+     excluirLancamento,
+     atualizarLancamento,
 
-import { loginGoogle, onAuthChange } from "./services/auth/auth.service.js";
-import { getCategorias,categoriaExiste } from "./services/categorias/categorias.service.js";
+ } from "./services/lancamentos/lancamentos.service.js";
 
-// console.log("cats",getCategorias());
-console.log("APP CARREGOU");
-let data=[];
+ import {
+     loginGoogle,
+     onAuthChange
+ } from "./services/auth/auth.service.js";
+ import {
+     getCategorias,
+     categoriaExiste
+ } from "./services/categorias/categorias.service.js";
 
-let editandoId = null;
+ // console.log("cats",getCategorias());
+ console.log("APP CARREGOU");
+ let data = [];
 
-
-onAuthChange((user) => {
-
-    if (user) {
-
-        console.log("Usuário logado:");
-
-        console.log(user);
-        atualizarUsuario(user);
-
-    } else {
-
-        console.log("Nenhum usuário logado");
-
-    }
-
-});
+ let editandoId = null;
 
 
-function atualizarUsuario(user) {
+ onAuthChange((user) => {
 
-    const nome = document.getElementById("user-name");
-    const email = document.getElementById("user-email");
-    const photo = document.getElementById("user-photo");
+     if (user) {
 
-    if (!nome || !email || !photo) return;
+         console.log("Usuário logado:");
 
-    if (user) {
+         console.log(user);
+         atualizarUsuario(user);
 
-        photo.src = user.photoURL || "assets/img/avatar.png";
+     } else {
 
-        nome.textContent = user.displayName || "Usuário";
+         console.log("Nenhum usuário logado");
 
-        email.textContent = user.email || "";
+     }
 
-    } else {
-
-        photo.src = "assets/img/avatar.png";
-
-        nome.textContent = "Não autenticado";
-
-        email.textContent = "";
-
-    }
-
-}
-
-async function testarLogin() {
-
-    try {
-
-        const user = await loginGoogle();
-
-        console.log(user);
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
-}
-
-async function atualizarTela(){
-   console.trace("ATUALIZAR TELA CHAMOU");
-
-    data = await listarLancamentos();
-
-    render();
-
-}
+ });
 
 
-function atualizarDashboard() {
+ function atualizarUsuario(user) {
 
-    let entradas = 0;
-    let saidas = 0;
+     const nome = document.getElementById("user-name");
+     const email = document.getElementById("user-email");
+     const photo = document.getElementById("user-photo");
 
-    data.forEach(item => {
+     if (!nome || !email || !photo) return;
 
-        if (item.tipo === "entrada") {
+     if (user) {
 
-            entradas += item.valor;
+         photo.src = user.photoURL || "assets/img/avatar.png";
 
-        } else {
+         nome.textContent = user.displayName || "Usuário";
 
-            saidas += item.valor;
+         email.textContent = user.email || "";
 
-        }
+     } else {
 
-    });
+         photo.src = "assets/img/avatar.png";
 
-    const saldo = entradas - saidas;
+         nome.textContent = "Não autenticado";
 
-    document.getElementById("entradas").innerHTML =
-        `R$ ${entradas.toFixed(2)}`;
+         email.textContent = "";
 
-    document.getElementById("saidas").innerHTML =
-        `R$ ${saidas.toFixed(2)}`;
+     }
 
-    const saldoEl = document.getElementById("saldo");
+ }
 
-    saldoEl.innerHTML =
-        `R$ ${saldo.toFixed(2)}`;
+ async function testarLogin() {
 
-    saldoEl.className =
-        `text-3xl font-bold mt-2 ${
+     try {
+
+         const user = await loginGoogle();
+
+         console.log(user);
+
+     } catch (error) {
+
+         console.error(error);
+
+     }
+
+ }
+
+ async function atualizarTela() {
+     console.trace("ATUALIZAR TELA CHAMOU");
+
+     data = await listarLancamentos();
+
+     render();
+
+ }
+
+
+ function atualizarDashboard() {
+
+     let entradas = 0;
+     let saidas = 0;
+
+     data.forEach(item => {
+
+         if (item.tipo === "entrada") {
+
+             entradas += item.valor;
+
+         } else {
+
+             saidas += item.valor;
+
+         }
+
+     });
+
+     const saldo = entradas - saidas;
+
+     document.getElementById("entradas").innerHTML =
+         `R$ ${entradas.toFixed(2)}`;
+
+     document.getElementById("saidas").innerHTML =
+         `R$ ${saidas.toFixed(2)}`;
+
+     const saldoEl = document.getElementById("saldo");
+
+     saldoEl.innerHTML =
+         `R$ ${saldo.toFixed(2)}`;
+
+     saldoEl.className =
+         `text-3xl font-bold mt-2 ${
             saldo >= 0
                 ? "text-blue-600"
                 : "text-red-600"
         }`;
 
-}
+ }
 
 
-function cancelarEdicao() {
+ function cancelarEdicao() {
 
-    editandoId = null;
+     editandoId = null;
 
-    const input = document.getElementById("command");
-    input.value = "";
+     const input = document.getElementById("command");
+     input.value = "";
 
-    document.getElementById("btnAdicionar").textContent = "Adicionar";
+     document.getElementById("btnAdicionar").textContent = "Adicionar";
 
-    document.getElementById("btnCancelar").classList.add("hidden");
+     document.getElementById("btnCancelar").classList.add("hidden");
 
-    input.focus();
+     input.focus();
 
-}
+ }
 
-function render() {
+ function render() {
 
-    const tbody = document.getElementById("tbody");
+     const tbody = document.getElementById("tbody");
 
-    tbody.innerHTML = "";
+     tbody.innerHTML = "";
 
-    data.forEach((item, index) => {
+     data.forEach((item, index) => {
 
-    
-    // console.log("DATA RAW:", item.data?.toDate?.());
-    // console.log("CREATED RAW:", item.createdAt?.toDate?.());
 
-   const dataBase = item.data || item.createdAt;
+         // console.log("DATA RAW:", item.data?.toDate?.());
+         // console.log("CREATED RAW:", item.createdAt?.toDate?.());
 
-    const dataFormatada = dataBase
-    ? dataBase.toDate().toLocaleString("pt-BR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit"
-      })
-    : "--";
+         const dataBase = item.data || item.createdAt;
 
-        // console.log(item);
+         const dataFormatada = dataBase ?
+             dataBase.toDate().toLocaleString("pt-BR", {
+                 day: "2-digit",
+                 month: "2-digit",
+                 year: "numeric",
+                 hour: "2-digit",
+                 minute: "2-digit"
+             }) :
+             "--";
 
-tbody.innerHTML += `
+         // console.log(item);
+
+         tbody.innerHTML += `
 
 <tr class="
     border-b border-gray-200 
@@ -276,171 +281,171 @@ Excluir
 
 `;
 
-    });
+     });
 
-    // atualizarDashboard();
+     // atualizarDashboard();
 
-}
+ }
  async function adicionar() {
 
-    const input = document.getElementById("command");
+     const input = document.getElementById("command");
 
-    const texto = input.value.trim();
+     const texto = input.value.trim();
 
-    if (!texto) return;
-
-    
-
-const partes = texto.split(" ");
-
-const tipo = partes[0].toLowerCase();
-const valor = parseFloat(partes[1].replace(",", "."));
-const categoria = partes[2];
-
- const dataRegex = /^\d{2}\/\d{2}\/\d{4}(\s\d{2}:\d{2})?$/;
-
-let data = null;
-
-for (let i = partes.length - 1; i >= 0; i--) {
-
-    const possivelData = partes.slice(i).join(" ");
-
-    if (dataRegex.test(possivelData)) {
-        data = possivelData;
-        partes.splice(i);
-        break;
-    }
-}
-const descricao = partes.slice(3).join(" ");
-
-console.log({
-    tipo,
-    valor,
-    categoria,
-    descricao,
-    data
-});
+     if (!texto) return;
 
 
-    if (
-        (tipo !== "entrada" && tipo !== "saida") ||
-        isNaN(valor)
-    ) {
-        alert("Comando inválido");
-        return;
-    }
 
-    if (!categoriaExiste(tipo, categoria)) {
+     const partes = texto.split(" ");
 
-    alert(
-        `Categoria "${categoria}" não encontrada para ${tipo}.`
-    );
+     const tipo = partes[0].toLowerCase();
+     const valor = parseFloat(partes[1].replace(",", "."));
+     const categoria = partes[2];
 
-    return;
+     const dataRegex = /^\d{2}\/\d{2}\/\d{4}(\s\d{2}:\d{2})?$/;
 
-}
-    if (editandoId) {
+     let data = null;
 
-     await atualizarLancamento(editandoId, {
-        tipo,
-        valor,
-        categoria,
-        descricao,
-        data
-    });
-        editandoId = null;
-        document.getElementById("btnAdicionar").textContent = "Adicionar";
-        document.getElementById("btnCancelar").classList.add("hidden");
-    } else {
+     for (let i = partes.length - 1; i >= 0; i--) {
 
-        await salvarLancamento(
-            tipo,
-            valor,
-            categoria,
-            descricao,
-            data
-        );
+         const possivelData = partes.slice(i).join(" ");
 
-    }
+         if (dataRegex.test(possivelData)) {
+             data = possivelData;
+             partes.splice(i);
+             break;
+         }
+     }
+     const descricao = partes.slice(3).join(" ");
 
-    input.value = "";
-
-    await atualizarTela();
-
-}
-async function remover(id) {
-
-    const confirmar = confirm(
-        "Deseja realmente excluir este lançamento?"
-    );
-
-    if (!confirmar) return;
-
-    await excluirLancamento(id);
-
-    await atualizarTela();
-
-}
-
-function editar(id) {
-
-    const lancamento = data.find(item => item.id === id);
-
-    if (!lancamento) return;
-
-    const input = document.getElementById("command");
-
-    const dataObj = lancamento.data || lancamento.createdAt;
-
- let dataFormatada = "";
-
-if (dataObj) {
-
-    const d = dataObj.toDate();
-
-    const dia = String(d.getDate()).padStart(2, "0");
-    const mes = String(d.getMonth() + 1).padStart(2, "0");
-    const ano = d.getFullYear();
-    dataFormatada = `${dia}/${mes}/${ano}`;
-}
-    input.value =
-        `${lancamento.tipo} ${lancamento.valor} ${lancamento.categoria} ${lancamento.descricao}` +
-        (dataFormatada ? ` ${dataFormatada}` : "");
-
-    editandoId = id;
-
-    document.getElementById("btnAdicionar").textContent = "Salvar alterações";
-    document.getElementById("btnCancelar").classList.remove("hidden");
-
-    input.focus();
-}
-document.getElementById("btnAdicionar")
-.addEventListener("click",adicionar);
-
-document.getElementById("command")
-.addEventListener("keypress",(e)=>{
-
-if(e.key==="Enter")
-adicionar();
-
-});
-
-document.getElementById("themeBtn")
-.addEventListener("click",()=>{
-
-document.documentElement.classList.toggle("dark");
-
-});
-
-(async () => {
-    await atualizarTela();
-})();
-
- 
-window.adicionar  
-window.editar = editar;
-window.remover = remover;
-window.cancelarEdicao = cancelarEdicao;
+     console.log({
+         tipo,
+         valor,
+         categoria,
+         descricao,
+         data
+     });
 
 
-window.testarLogin = testarLogin;
+     if (
+         (tipo !== "entrada" && tipo !== "saida") ||
+         isNaN(valor)
+     ) {
+         alert("Comando inválido");
+         return;
+     }
+
+     if (!categoriaExiste(tipo, categoria)) {
+
+         alert(
+             `Categoria "${categoria}" não encontrada para ${tipo}.`
+         );
+
+         return;
+
+     }
+     if (editandoId) {
+
+         await atualizarLancamento(editandoId, {
+             tipo,
+             valor,
+             categoria,
+             descricao,
+             data
+         });
+         editandoId = null;
+         document.getElementById("btnAdicionar").textContent = "Adicionar";
+         document.getElementById("btnCancelar").classList.add("hidden");
+     } else {
+
+         await salvarLancamento(
+             tipo,
+             valor,
+             categoria,
+             descricao,
+             data
+         );
+
+     }
+
+     input.value = "";
+
+     await atualizarTela();
+
+ }
+ async function remover(id) {
+
+     const confirmar = confirm(
+         "Deseja realmente excluir este lançamento?"
+     );
+
+     if (!confirmar) return;
+
+     await excluirLancamento(id);
+
+     await atualizarTela();
+
+ }
+
+ function editar(id) {
+
+     const lancamento = data.find(item => item.id === id);
+
+     if (!lancamento) return;
+
+     const input = document.getElementById("command");
+
+     const dataObj = lancamento.data || lancamento.createdAt;
+
+     let dataFormatada = "";
+
+     if (dataObj) {
+
+         const d = dataObj.toDate();
+
+         const dia = String(d.getDate()).padStart(2, "0");
+         const mes = String(d.getMonth() + 1).padStart(2, "0");
+         const ano = d.getFullYear();
+         dataFormatada = `${dia}/${mes}/${ano}`;
+     }
+     input.value =
+         `${lancamento.tipo} ${lancamento.valor} ${lancamento.categoria} ${lancamento.descricao}` +
+         (dataFormatada ? ` ${dataFormatada}` : "");
+
+     editandoId = id;
+
+     document.getElementById("btnAdicionar").textContent = "Salvar alterações";
+     document.getElementById("btnCancelar").classList.remove("hidden");
+
+     input.focus();
+ }
+ document.getElementById("btnAdicionar")
+     .addEventListener("click", adicionar);
+
+ document.getElementById("command")
+     .addEventListener("keypress", (e) => {
+
+         if (e.key === "Enter")
+             adicionar();
+
+     });
+
+ document.getElementById("themeBtn")
+     .addEventListener("click", () => {
+
+         document.documentElement.classList.toggle("dark");
+
+     });
+
+ (async () => {
+     await atualizarTela();
+ })();
+
+
+ window.adicionar
+ window.editar = editar;
+ window.remover = remover;
+ window.cancelarEdicao = cancelarEdicao;
+
+
+ window.testarLogin = testarLogin;

@@ -20,37 +20,51 @@ export async function salvarLancamento(
     descricao,
     data = null
 ) {
-
     try {
 
         const user = getUser();
 
-        if (!user) throw new Error("Nenhum usuário autenticado.");
+        if (!user)
+            throw new Error("Nenhum usuário autenticado.");
 
-         
+        let dataLancamento;
 
-       let dataLancamento;
+        if (data) {
 
-if (data) {
+            // separa data e hora (se existir)
+            const [dataTexto, horaTexto] = data.split(" ");
 
-    const [dia, mes, ano] = data.split("/");
+            const [dia, mes, ano] = dataTexto.split("/");
 
-    const agora = new Date();
+            let hora = 0;
+            let minuto = 0;
 
-    dataLancamento = new Date(
-        ano,
-        mes - 1,
-        dia,
-        agora.getHours(),
-        agora.getMinutes(),
-        agora.getSeconds()
-    );
+            if (horaTexto) {
+                [hora, minuto] = horaTexto.split(":").map(Number);
+            } else {
+                const agora = new Date();
+                hora = agora.getHours();
+                minuto = agora.getMinutes();
+            }
 
-} else {
+            dataLancamento = new Date(
+                Number(ano),
+                Number(mes) - 1,
+                Number(dia),
+                hora,
+                minuto,
+                0
+            );
 
-    dataLancamento = new Date();
+            if (isNaN(dataLancamento.getTime())) {
+                throw new Error("Data inválida: " + data);
+            }
 
-}
+        } else {
+
+            dataLancamento = new Date();
+
+        }
 
         const docRef = await addDoc(
             collection(db, "lancamentos"),
@@ -69,21 +83,15 @@ if (data) {
                 createdAt: serverTimestamp()
             }
         );
-console.log("Salvou:", {
-    tipo,
-    valor,
-    categoria,
-    descricao,
-    data
-});
+
         console.log("Documento salvo:", docRef.id);
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Erro ao salvar:", error);
+        throw error;
 
     }
-
 }
 export async function listarLancamentos() {
 
@@ -136,45 +144,18 @@ export async function atualizarLancamento(id, dados) {
 
         if (dados.data) {
 
-            let date;
+            const [dia, mes, ano] = dados.data.split("/");
 
-            // 🔥 caso venha string (input)
-            if (typeof dados.data === "string") {
+            const agora = new Date();
 
-                const [dia, mes, ano] = dados.data.split("/");
-
-                const agora = new Date();
-
-                date = new Date(
-                    ano,
-                    mes - 1,
-                    dia,
-                    agora.getHours(),
-                    agora.getMinutes(),
-                    agora.getSeconds()
-                );
-
-            } 
-            // 🔥 caso venha Timestamp ou Date
-            else {
-
-                const d = dados.data.toDate
-                    ? dados.data.toDate()
-                    : new Date(dados.data);
-
-                const agora = new Date();
-
-                date = new Date(
-                    d.getFullYear(),
-                    d.getMonth(),
-                    d.getDate(),
-                    agora.getHours(),
-                    agora.getMinutes(),
-                    agora.getSeconds()
-                );
-            }
-
-            dados.data = date;
+            dados.data = new Date(
+                Number(ano),
+                Number(mes) - 1,
+                Number(dia),
+                agora.getHours(),
+                agora.getMinutes(),
+                agora.getSeconds()
+            );
         }
 
         await updateDoc(
@@ -188,5 +169,6 @@ export async function atualizarLancamento(id, dados) {
 
         console.error("Erro ao atualizar:", error);
         throw error;
+
     }
 }
