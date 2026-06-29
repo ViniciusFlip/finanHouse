@@ -17,7 +17,7 @@ export const categorias = {
         "Casa",
         "Alimentação",
         "Lazer",
-        
+        "Farmacia",
         "Marion",
         "Thais",
         "Vinicius",
