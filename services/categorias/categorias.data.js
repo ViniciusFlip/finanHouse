@@ -6,7 +6,10 @@ export const categorias = {
         "Outros",
         "Thais",
         "Vinicius",
+        "Emprestimo",
         "Poupança",
+        "Trabalho",
+        "Pessoal",
         "teste"
     ],
 
@@ -18,9 +21,10 @@ export const categorias = {
         "Marion",
         "Thais",
         "Vinicius",
-
+        "Trabalho",
+        "Emprestimo",
         "Poupança",
-
+         "Pessoal",
         "Manga",
         "Recarga",
         "Remedio",
