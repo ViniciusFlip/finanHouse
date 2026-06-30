@@ -114,7 +114,7 @@
      });
 
      const saldo = entradas - saidas;
-
+console.log(saldo)
      document.getElementById("entradas").innerHTML =
          `R$ ${entradas.toFixed(2)}`;
 
@@ -135,7 +135,7 @@
 
  }
 
-
+atualizarDashboard()
  function cancelarEdicao() {
 
      editandoId = null;

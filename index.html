@@ -99,26 +99,30 @@ xl:h-screen
    
             <!-- MENU -->
             <nav class="p-3 space-y-2">
-               <a href="/index.html"
+               <a href="index.html"
                   class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
                <span><i data-lucide="home"></i></span>
                <span class="sidebar-text">Inicio</span>
                </a>
-                <a href="house.html"
+
+                <a href="index.html"
                   class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
                <span><i data-lucide="upload"></i></span>
                <span class="sidebar-text">Entradas/Saidas</span>
                </a>
+
+                 <a href="resumo.html"
+                  class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
+               <span><i data-lucide="home"></i></span>
+               <span class="sidebar-text">Resumo Detalhado</span>
+               </a>
+               
                 <a href="debitos.html"
                   class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
                <span><i data-lucide="download"></i></span>
                <span class="sidebar-text">Contas Pagar</span>
                </a>
-                <a href="resumo.html"
-                  class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
-               <span><i data-lucide="home"></i></span>
-               <span class="sidebar-text">Resumo Detalhado</span>
-               </a>
+              
                <a href="compras.html"
                   class="sidebar-item flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 transition">
                <span><i data-lucide="download"></i></span>
@@ -200,7 +204,60 @@ xl:h-screen
 
 
 
-          
+          <div class="space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6 ">
+
+    <div class="bg-[#eeeeee] rounded-[24px] p-6 border border-white/10">
+        <p class="text-gray-500 text-sm">Saldo Atual</p>
+
+        <h2
+            id="saldo"
+            class="text-3xl font-bold text-blue-600 mt-2">
+
+            R$ 0,00
+
+        </h2>
+    </div>
+
+    <div class="bg-[#eeeeee] rounded-[24px] p-6 border border-white/10">
+
+        <p class="text-gray-500 text-sm">
+
+            Entradas
+
+        </p>
+
+        <h2
+            id="entradas"
+            class="text-3xl font-bold text-green-600 mt-2">
+
+            R$ 0,00
+
+        </h2>
+
+    </div>
+
+    <div class="bg-[#eeeeee] rounded-[24px] p-6 border border-white/10">
+
+        <p class="text-gray-500 text-sm">
+
+            Saídas
+
+        </p>
+
+        <h2
+            id="saidas"
+            class="text-3xl font-bold text-red-600 mt-2">
+
+            R$ 0,00
+
+        </h2>
+
+    </div>
+
+</div>
+
+          </div>
      <div class="space-y-5">
 
  
